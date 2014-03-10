@@ -1,1 +1,1 @@
-* XSLT transformation to generate JIRA markup of table from HTML tables
+* XSLT transformation to generate JIRA markup from ordinary HTML tables
