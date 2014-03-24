@@ -75,9 +75,8 @@ function transformFile() {
 }
 
 function transformTextarea() {
-  
   inputValue = document.getElementById("input").value;
-  xml = inputValue;
+  xml = new DOMParser().parseFromString( inputValue, "text/xml" );;
   xsl = loadXMLDoc("HTMLtoJIRA.xslt");
   // code for IE
   if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
@@ -91,7 +90,7 @@ function transformTextarea() {
     resultDocument = xsltProcessor.transformToFragment(xml, document);
     
     //output = document.createTextNode(resultDocument);
-    document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
+    //document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
     if(resultDocument == null) {
       document.getElementById("output").innerHTML = "Transformation failed! Input value:" + xml;
       //document.getElementById("output").innerHTML = resultDocument;
