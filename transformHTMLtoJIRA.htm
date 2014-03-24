@@ -3,24 +3,24 @@
 <style type="text/css">
 <!--
 /* TODO refer an external file */
-div.textareawrapper {
-  display: block;
-  border: 1px solid black;
-  padding: 1px;
-  
+
+html {
+	background-color: #eee;
+	font-family: Sans-Serif;
 }
 
-textarea {
+#input {
   width: 99%;
   height: 33%;
-  margin: 0; padding: 0;
+  margin: 0; 
+  padding: 0;
 }
 
-.boxsizingBorder {
-  -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+#output {
+	background-color: white;
+	border: 1px solid black;
 }
+
 -->
 </style>
 <script>
@@ -46,10 +46,6 @@ function loadXMLDoc(filename) {
 }
 
 function transformFile() {
-  
-  
-  //var parser = new DOMParser();
-  //var xml = new DOMParser().parseFromString(document.getElementById("input").value);
   xml = loadXMLDoc("input.xml");
   xsl = loadXMLDoc("HTMLtoJIRA.xslt");
   // code for IE
@@ -60,10 +56,7 @@ function transformFile() {
     // code for Chrome, Firefox, Opera, etc. 
     xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
-    
     resultDocument = xsltProcessor.transformToFragment(xml, document);
-    
-    //output = document.createTextNode(resultDocument);
     document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
     if(resultDocument == null) {
       alert("Transformation failed!");
@@ -95,6 +88,7 @@ function transformTextarea() {
       document.getElementById("output").innerHTML = "Transformation failed! Input value:" + xml;
       //document.getElementById("output").innerHTML = resultDocument;
     } else {
+      // TODO remove previous content
       document.getElementById("output").appendChild(resultDocument);
     }
     
@@ -107,8 +101,9 @@ function transformTextarea() {
   <h3>Input</h3>
   <textarea id="input"></textarea>
   <button type="button" onClick="transformFile();">load file &amp; transform</button>
-  <button type="button" onClick="transformTextarea();">transform textarea</button>
+  <button type="button" onClick="transformTextarea();">transform from textarea</button>
   <br/>
+  <h3>Output</h3>
   <pre id="output" />
 </body>
 </html>
