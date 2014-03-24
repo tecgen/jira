@@ -45,13 +45,12 @@ function loadXMLDoc(filename) {
   return xhttp.responseXML;
 }
 
-function displayResult() {
+function transformFile() {
   
   
   //var parser = new DOMParser();
-  //var xml = parser.parseFromString(document.getElementById("input"));
+  //var xml = new DOMParser().parseFromString(document.getElementById("input").value);
   xml = loadXMLDoc("input.xml");
-  
   xsl = loadXMLDoc("HTMLtoJIRA.xslt");
   // code for IE
   if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
@@ -65,20 +64,53 @@ function displayResult() {
     resultDocument = xsltProcessor.transformToFragment(xml, document);
     
     //output = document.createTextNode(resultDocument);
-    document.getElementById("input").text = resultDocument;
-    document.getElementById("output").appendChild(resultDocument);
-    
+    document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
+    if(resultDocument == null) {
+      alert("Transformation failed!");
+    } else {
+      document.getElementById("output").appendChild(resultDocument);
     }
+    
   }
+}
+
+function transformTextarea() {
+  
+  var input = document.getElementById("input").value;
+  var xml = new DOMParser().parseFromString(input);
+
+  xsl = loadXMLDoc("HTMLtoJIRA.xslt");
+  // code for IE
+  if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
+    ex = xml.transformNode(xsl);
+    document.getElementById("output").innerHTML = ex;
+  } else if (document.implementation && document.implementation.createDocument) {
+    // code for Chrome, Firefox, Opera, etc. 
+    xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsl);
+    
+    resultDocument = xsltProcessor.transformToFragment(xml, document);
+    
+    //output = document.createTextNode(resultDocument);
+    document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
+    if(resultDocument == null) {
+      alert("Transformation failed!");
+    } else {
+      document.getElementById("output").appendChild(resultDocument);
+    }
+    
+  }
+}
 </script>
 </head>
 <body> 
   <h1>XSLT Client Side Transformation</h1>
   <h3>Input</h3>
   <textarea id="input"></textarea>
-  <button type="button" onClick="displayResult();">transform</button>
+  <button type="button" onClick="transformFile();">transform file</button>
+  <button type="button" onClick="transformTextarea();">transform textarea</button>
   <br/>
   <h3>Output</h3>
-  <pre id="output" >
+  <pre id="output" />
 </body>
 </html>
