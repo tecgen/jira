@@ -76,9 +76,8 @@ function transformFile() {
 
 function transformTextarea() {
   
-  var input = document.getElementById("input").value;
-  var xml = new DOMParser().parseFromString(input);
-
+  inputValue = document.getElementById("input").value;
+  xml = inputValue;
   xsl = loadXMLDoc("HTMLtoJIRA.xslt");
   // code for IE
   if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
@@ -94,7 +93,8 @@ function transformTextarea() {
     //output = document.createTextNode(resultDocument);
     document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
     if(resultDocument == null) {
-      alert("Transformation failed!");
+      document.getElementById("output").innerHTML = "Transformation failed! Input value:" + xml;
+      //document.getElementById("output").innerHTML = resultDocument;
     } else {
       document.getElementById("output").appendChild(resultDocument);
     }
@@ -107,10 +107,9 @@ function transformTextarea() {
   <h1>XSLT Client Side Transformation</h1>
   <h3>Input</h3>
   <textarea id="input"></textarea>
-  <button type="button" onClick="transformFile();">transform file</button>
+  <button type="button" onClick="transformFile();">load file &amp; transform</button>
   <button type="button" onClick="transformTextarea();">transform textarea</button>
   <br/>
-  <h3>Output</h3>
   <pre id="output" />
 </body>
 </html>
