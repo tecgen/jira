@@ -1,0 +1,84 @@
+<html>
+<head>
+<style type="text/css">
+<!--
+/* TODO refer an external file */
+div.textareawrapper {
+  display: block;
+  border: 1px solid black;
+  padding: 1px;
+  
+}
+
+textarea {
+  width: 99%;
+  height: 33%;
+  margin: 0; padding: 0;
+}
+
+.boxsizingBorder {
+  -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+-->
+</style>
+<script>
+
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
+}
+
+function loadXMLDoc(filename) {
+  if (window.ActiveXObject) {
+    xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } else  {
+    xhttp = new XMLHttpRequest();
+  }
+  xhttp.open("GET", filename, false);
+  try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
+  xhttp.send("");
+  return xhttp.responseXML;
+}
+
+function displayResult() {
+  
+  
+  //var parser = new DOMParser();
+  //var xml = parser.parseFromString(document.getElementById("input"));
+  xml = loadXMLDoc("input.xml");
+  
+  xsl = loadXMLDoc("HTMLtoJIRA.xslt");
+  // code for IE
+  if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
+    ex = xml.transformNode(xsl);
+    document.getElementById("output").innerHTML = ex;
+  } else if (document.implementation && document.implementation.createDocument) {
+    // code for Chrome, Firefox, Opera, etc. 
+    xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsl);
+    
+    resultDocument = xsltProcessor.transformToFragment(xml, document);
+    
+    //output = document.createTextNode(resultDocument);
+    document.getElementById("input").text = resultDocument;
+    document.getElementById("output").appendChild(resultDocument);
+    
+    }
+  }
+</script>
+</head>
+<body> 
+  <h1>XSLT Client Side Transformation</h1>
+  <h3>Input</h3>
+  <textarea id="input"></textarea>
+  <button type="button" onClick="displayResult();">transform</button>
+  <br/>
+  <h3>Output</h3>
+  <pre id="output" >
+</body>
+</html>
