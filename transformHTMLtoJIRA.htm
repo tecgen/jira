@@ -1,5 +1,6 @@
 <html>
 <head>
+	<title>HTML to JIRA Tables</title>
 <style type="text/css">
 <!--
 /* TODO refer an external file */
@@ -12,7 +13,7 @@ html {
 #input {
   width: 99%;
   height: 33%;
-  margin: 0; 
+  margin: 0;
   padding: 0;
 }
 
@@ -53,7 +54,7 @@ function transformFile() {
     ex = xml.transformNode(xsl);
     document.getElementById("output").innerHTML = ex;
   } else if (document.implementation && document.implementation.createDocument) {
-    // code for Chrome, Firefox, Opera, etc. 
+    // code for Chrome, Firefox, Opera, etc.
     xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
     resultDocument = xsltProcessor.transformToFragment(xml, document);
@@ -63,7 +64,7 @@ function transformFile() {
     } else {
       document.getElementById("output").appendChild(resultDocument);
     }
-    
+
   }
 }
 
@@ -76,12 +77,12 @@ function transformTextarea() {
     ex = xml.transformNode(xsl);
     document.getElementById("output").innerHTML = ex;
   } else if (document.implementation && document.implementation.createDocument) {
-    // code for Chrome, Firefox, Opera, etc. 
+    // code for Chrome, Firefox, Opera, etc.
     xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
-    
+
     resultDocument = xsltProcessor.transformToFragment(xml, document);
-    
+
     //output = document.createTextNode(resultDocument);
     //document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
     if(resultDocument == null) {
@@ -91,12 +92,12 @@ function transformTextarea() {
       // TODO remove previous content
       document.getElementById("output").appendChild(resultDocument);
     }
-    
+
   }
 }
 </script>
 </head>
-<body> 
+<body>
   <h1>XSLT Client Side Transformation</h1>
   <h3>Input</h3>
   <textarea id="input"></textarea>
