@@ -1,0 +1,110 @@
+<html>
+<head>
+	<title>HTML to CSV Tables</title>
+<style type="text/css">
+<!--
+/* TODO refer an external file */
+
+html {
+	background-color: white;
+	font-family: Sans-Serif;
+}
+
+#input {
+  width: 99%;
+  height: 33%;
+  margin: 0;
+  padding: 0;
+}
+
+#output {
+	background-color: white;
+	border: 1px solid grey;
+}
+
+-->
+</style>
+<script>
+
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
+}
+
+function loadXMLDoc(filename) {
+  if (window.ActiveXObject) {
+    xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } else  {
+    xhttp = new XMLHttpRequest();
+  }
+  xhttp.open("GET", filename, false);
+  try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
+  xhttp.send("");
+  return xhttp.responseXML;
+}
+
+function transformFile() {
+  xml = loadXMLDoc("input.xml");
+  xsl = loadXMLDoc("HTMLtoCSV.xslt");
+  // code for IE
+  if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
+    ex = xml.transformNode(xsl);
+    document.getElementById("output").innerHTML = ex;
+  } else if (document.implementation && document.implementation.createDocument) {
+    // code for Chrome, Firefox, Opera, etc.
+    xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsl);
+    resultDocument = xsltProcessor.transformToFragment(xml, document);
+    document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
+    if(resultDocument == null) {
+      alert("Transformation failed!");
+    } else {
+      document.getElementById("output").appendChild(resultDocument);
+    }
+
+  }
+}
+
+function transformTextarea() {
+  inputValue = document.getElementById("input").value;
+  xml = new DOMParser().parseFromString( inputValue, "text/xml" );;
+  xsl = loadXMLDoc("HTMLtoCSV.xslt");
+  // code for IE
+  if (window.ActiveXObject || xhttp.responseType == "msxml-document") {
+    ex = xml.transformNode(xsl);
+    document.getElementById("output").innerHTML = ex;
+  } else if (document.implementation && document.implementation.createDocument) {
+    // code for Chrome, Firefox, Opera, etc.
+    xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsl);
+
+    resultDocument = xsltProcessor.transformToFragment(xml, document);
+
+    //output = document.createTextNode(resultDocument);
+    //document.getElementById("input").value = new XMLSerializer().serializeToString(xml);
+    if(resultDocument == null) {
+      document.getElementById("output").innerHTML = "Transformation failed! Input value:" + xml;
+      //document.getElementById("output").innerHTML = resultDocument;
+    } else {
+      // TODO remove previous content
+      document.getElementById("output").appendChild(resultDocument);
+    }
+
+  }
+}
+</script>
+</head>
+<body>
+  <h1>HTML to CSV Tables</h1>
+  <h3>Input</h3>
+  <textarea id="input"></textarea>
+  <button type="button" onClick="transformFile();">load file &amp; transform</button>
+  <button type="button" onClick="transformTextarea();">transform from textarea</button>
+  <br/>
+  <h3>Output</h3>
+  <pre id="output" />
+</body>
+</html>
