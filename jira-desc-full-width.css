@@ -1,0 +1,22 @@
+/* JIRA ticket: description in full width  */
+div.aui-item.issue-main-column {
+ width: 99%;
+}
+
+div#viewissuesidebar.aui-item.issue-side-column {	
+ width: 30%;
+ position: absolute;
+ top: 9.5em;
+ right: 1em;
+ height: 17.5em;
+ overflow-y: scroll;
+ border: 0px dotted lightgrey;
+}
+
+div#details-module.module.toggle-wrap {
+ width: 70%;
+}
+
+div#customfield-tabs.aui-tabs.horizontal-tabs {
+ width: 94%;
+}
